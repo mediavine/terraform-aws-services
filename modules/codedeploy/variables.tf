@@ -53,9 +53,96 @@ variable "test_lb_listener_arns" {
 variable "blue_lb_target_group_arn" {
   type        = string
   description = "The ARN of the blue load balancer target group"
+  default     = ""
 }
 
 variable "green_lb_target_group_arn" {
   type        = string
   description = "The ARN of the green load balancer target group"
+}
+
+### Auto Create Listenr Inputs ###
+
+variable "load_balancer_arn" {
+  type        = string
+  description = "The ARN of the load balancer"
+}
+
+variable "http_test_listener_port" {
+  type        = number
+  description = "The http (NOT https) port of the test traffic listener"
+  default     = 8080
+}
+
+### Target Group Inputs ###
+variable "green_target_group_port" {
+  type        = number
+  description = "The port of the green target group"
+  default     = 3000
+}
+
+variable "vpc_id" {
+  type        = string
+  description = "The ID of the VPC"
+}
+
+variable "deregistration_delay" {
+  type        = number
+  description = "The amount of time to wait before deregistering a target"
+  default     = 300
+}
+
+variable "slow_start" {
+  type        = number
+  description = "The amount of time to wait before rerouting traffic to a new target"
+  default     = 60
+}
+
+variable "load_balancing_algorithm_type" {
+  type        = string
+  description = "The load balancing algorithm to use"
+  default     = "round_robin"
+}
+
+variable "target_group_health_check_enabled" {
+  type        = bool
+  description = "Whether or not to enable health checks on the target group"
+  default     = true
+}
+
+variable "target_group_health_check_interval" {
+  type        = number
+  description = "The interval between health checks"
+  default     = 30
+}
+
+variable "target_group_health_check_path" {
+  type        = string
+  description = "The path to check for health"
+  default     = "/"
+}
+
+variable "target_group_health_check_timeout" {
+  type        = number
+  description = "The amount of time to wait for a health check response"
+  default     = 5
+}
+
+variable "target_group_health_check_healthy_threshold" {
+  type        = number
+  description = "The number of consecutive successful health checks required before considering the target healthy"
+  default     = 2
+}
+
+variable "target_group_health_check_unhealthy_threshold" {
+  type        = number
+  description = "The number of consecutive failed health checks required before considering the target unhealthy"
+  default     = 2
+}
+
+variable "target_group_health_check_matcher" {
+  type        = string
+  description = "The HTTP response code to use for health checks"
+  default     = "200"
+
 }
