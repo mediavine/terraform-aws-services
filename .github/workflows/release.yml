@@ -1,0 +1,41 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Release
+        uses: docker://antonyurchenko/git-release:latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          RELEASE_NAME_PREFIX: "Release: "
+          ALLOW_EMPTY_CHANGELOG: true
+      - name: Get Changelog
+        id: get_changelog
+        run: |
+            CHANGELOG=$(docker run --rm -v $(pwd):/usr/local/src/your-app -w /usr/local/src/your-app antonyurchenko/git-release:latest changelog)
+            echo "::set-output name=changelog::$CHANGELOG"
+
+  slackNotification:
+    name: Terraform-Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        with:
+          node-version: '20'
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_CHANNEL: iac-guild
+          SLACK_USERNAME: github-actions
+          SLACK_TITLE: Terraform-AWS-Services Release
+          SLACK_TEXT: ${{ steps.get_changelog.outputs.changelog }}
