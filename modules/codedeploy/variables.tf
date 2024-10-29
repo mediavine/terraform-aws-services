@@ -20,6 +20,7 @@ variable "deployment_config_name" {
 variable "service_role_arn" {
   type        = string
   description = "The ARN of the IAM role to use for this deployment group"
+  default     = ""
 }
 
 variable "blue_instance_termination_success_time" {
@@ -40,25 +41,27 @@ variable "ecs_service_name" {
   default     = "default"
 }
 
-variable "prod_lb_listener_arns" {
+variable "prod_lb_listener_arn" {
   type        = list(string)
-  description = "The ARNs of the prod load balancer listener"
+  description = "The ARN of the prod load balancer listener"
 }
 
-variable "test_lb_listener_arns" {
+variable "test_lb_listener_arn" {
   type        = list(string)
-  description = "The ARNs of the test load balancer listener"
+  description = "The ARN of the test load balancer listener"
+  default     = []
 }
 
-variable "blue_lb_target_group_arn" {
+variable "blue_lb_target_group_name" {
   type        = string
   description = "The ARN of the blue load balancer target group"
   default     = ""
 }
 
-variable "green_lb_target_group_arn" {
+variable "green_lb_target_group_name" {
   type        = string
   description = "The ARN of the green load balancer target group"
+  default     = ""
 }
 
 ### Auto Create Listenr Inputs ###
