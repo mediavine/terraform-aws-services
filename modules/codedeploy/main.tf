@@ -7,7 +7,7 @@ resource "aws_codedeploy_deployment_group" "this" {
   app_name               = aws_codedeploy_app.this.name
   deployment_group_name  = "${var.codedeploy_app_name}-group-name"
   deployment_config_name = var.deployment_config_name
-  service_role_arn       = var.service_role_arn
+  service_role_arn       = length(var.service_role_arn) <= 1 ? aws_iam_role.this.arn : var.service_role_arn
 
   auto_rollback_configuration {
     enabled = true
@@ -39,39 +39,28 @@ resource "aws_codedeploy_deployment_group" "this" {
     target_group_pair_info {
 
       prod_traffic_route {
-        listener_arns = var.prod_lb_listener_arns
+        listener_arns = var.prod_lb_listener_arn
       }
 
       test_traffic_route {
-        listener_arns = length(var.test_lb_listener_arns) <= 1 ? aws_lb_listener.lb_http_test_listener[0].arn : var.test_lb_listener_arns
+        listener_arns = length(var.test_lb_listener_arn) <= 1 ? [aws_lb_listener.lb_http_test_listener[0].arn] : var.test_lb_listener_arn
       }
 
       target_group {
-        name = var.blue_lb_target_group_arn
+        name = var.blue_lb_target_group_name
       }
 
       target_group {
-        name = length(var.green_lb_target_group_arn) <= 1 ? aws_lb_target_group.lb_http_test_tg[0].arn : var.green_lb_target_group_arn
+        name = length(var.green_lb_target_group_name) <= 1 ? aws_lb_target_group.lb_http_test_tg[0].name : var.green_lb_target_group_name
       }
 
     }
   }
-}
-
-resource "aws_lb_listener" "lb_http_test_listener" {
-  count = length(var.test_lb_listener_arns) <= 1 ? 1 : 0
-
-  load_balancer_arn = var.load_balancer_arn
-  port              = var.http_test_listener_port
-  protocol          = "HTTP"
-  default_action {
-    target_group_arn = aws_lb_target_group.lb_http_test_tg[0].arn
-    type             = "forward"
-  }
+  depends_on = [aws_lb_listener.lb_http_test_listener, aws_lb_target_group.lb_http_test_tg]
 }
 
 resource "aws_lb_target_group" "lb_http_test_tg" {
-  count = length(var.green_lb_target_group_arn) <= 1 ? 1 : 0
+  count = length(var.green_lb_target_group_name) <= 1 ? 1 : 0
 
   name                          = "green-${var.ecs_service_name}"
   port                          = var.green_target_group_port
@@ -96,8 +85,19 @@ resource "aws_lb_target_group" "lb_http_test_tg" {
     matcher             = var.target_group_health_check_matcher
   }
   target_type = "ip"
+}
 
-  lifecycle {
-    create_before_destroy = true
+resource "aws_lb_listener" "lb_http_test_listener" {
+  count = length(var.test_lb_listener_arn) <= 1 ? 1 : 0
+
+  load_balancer_arn = var.load_balancer_arn
+  port              = var.http_test_listener_port
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = length(var.green_lb_target_group_name) <= 1 ? aws_lb_target_group.lb_http_test_tg[0].arn : var.green_lb_target_group_name
   }
+
+  depends_on = [aws_lb_target_group.lb_http_test_tg]
 }

@@ -1,0 +1,6 @@
+module.codedeploy.data.aws_caller_identity.current
+module.codedeploy.aws_codedeploy_app.this
+module.codedeploy.aws_iam_policy.codedeploy_ecs_policy[0]
+module.codedeploy.aws_iam_role.this
+module.codedeploy.aws_iam_role_policy_attachment.aws_code_deploy_role
+module.codedeploy.aws_iam_role_policy_attachment.codedeploy_ecs_policy[0]
