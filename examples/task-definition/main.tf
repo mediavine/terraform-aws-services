@@ -1,6 +1,13 @@
-locals {
+module "task_definition_example2" {
+  source               = "../../modules/task-definition/task-definition-module"
+  aws_region           = var.aws_region
+  task_definition_name = var.task_definition_name
+  task_cpu             = var.task_cpu
+  task_memory          = var.task_memory
+  network_mode         = var.network_mode
 
-  container_definition = {
+
+  container_definitions = {
     (var.container_name) = {
       name      = var.name
       command   = var.command
@@ -16,7 +23,7 @@ locals {
       ]
       logConfiguration = {
         logDriver = var.logDriver
-        logOptions = {
+        options = {
           "awslogs-create-group"  = var.awslogs_create_group
           "awslogs-group"         = var.awslogs_group
           "awslogs-region"        = var.awslogs_region
@@ -35,10 +42,10 @@ locals {
       essential              = var.sidecar_essential
       user                   = var.sidecar_user #"0"
       image                  = var.fluentd_image
-      environment            = []                                   #[]
-      mountPoints            = []                                   #[]
-      systemControl          = []                                   #[]
-      volumeFrom             = []                                   #[]
+      environment            = []             
+      mountPoints            = []            
+      systemControl          = []            
+      volumeFrom             = []             
       readonlyRootFilesystem = var.sidecar_readonly_root_filesystem #false
       portMapping = [
         {
@@ -66,4 +73,7 @@ locals {
 
     }
   }
+
+
+
 }

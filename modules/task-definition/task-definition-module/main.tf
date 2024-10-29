@@ -27,36 +27,38 @@ resource "aws_ecs_task_definition" "this" {
       cpu_architecture        = var.cpu_architecture
     }
   }
+  #create volume block if create_volume is true
+  dynamic "volume" {
+    for_each = var.create_volume ? [1] : []
+    content {
+      name      = var.volume_name
+      host_path = var.host_path
 
-
-  volume {
-    name      = var.volume_name
-    host_path = var.host_path
-    #optional; If scope is enabled, create the required docker volume
-    dynamic "docker_volume_configuration" {
-      for_each = var.scope == null ? [] : [1]
-      content {
-        scope         = var.scope
-        autoprovision = var.autoprovision
-        driver        = var.driver
-        driver_opts   = var.driver_opts
-        labels        = var.labels
+      #optional; If scope is enabled, create the required docker volume
+      dynamic "docker_volume_configuration" {
+        for_each = var.scope == null ? [] : [1]
+        content {
+          scope         = var.scope
+          autoprovision = var.autoprovision
+          driver        = var.driver
+          driver_opts   = var.driver_opts
+          labels        = var.labels
+        }
       }
-    }
-    #optional; if file_system_id is enabled, create the required efs volume
-    dynamic "efs_volume_configuration" {
-      for_each = var.file_system_id != null ? [1] : []
-      content {
-        file_system_id          = var.file_system_id
-        root_directory          = var.root_directory
-        transit_encryption      = var.transit_encryption
-        transit_encryption_port = var.transit_encryption_port
-        authorization_config {
-          access_point_id = var.access_point_id
-          iam             = var.iam
+      #optional; if file_system_id is enabled, create the required efs volume
+      dynamic "efs_volume_configuration" {
+        for_each = var.file_system_id != null ? [1] : []
+        content {
+          file_system_id          = var.file_system_id
+          root_directory          = var.root_directory
+          transit_encryption      = var.transit_encryption
+          transit_encryption_port = var.transit_encryption_port
+          authorization_config {
+            access_point_id = var.access_point_id
+            iam             = var.iam
+          }
         }
       }
     }
-
   }
 }
