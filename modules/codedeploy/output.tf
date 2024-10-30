@@ -32,3 +32,7 @@ output "green_lb_target_group_name" {
 output "lb_http_test_tg_name" {
   value = aws_lb_target_group.lb_http_test_tg[0].name
 }
+
+output "lb_http_test_tg_arn" {
+  value = aws_lb_target_group.lb_http_test_tg[0].arn
+}
