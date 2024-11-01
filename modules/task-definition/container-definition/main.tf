@@ -1,5 +1,4 @@
 locals {
-
   container_definition = {
     (var.container_name) = {
       name      = var.name
@@ -8,7 +7,8 @@ locals {
       essential = var.essential
       image     = var.image
       memory    = var.memory
-      portMapping = [
+      memoryReservation = var.memory_reservation
+      portMappings = [
         {
           containerPort = var.containerPort
           hostPort      = var.hostPort
@@ -25,22 +25,28 @@ locals {
       }
       environment = []
       secrets     = []
-    },
+      mountPoints            = []                                   #[]
+      systemControls         = []                                   #[]
+      volumesFrom             = []  
+    }
+  }
+
+  sidecar_definition = {
     (var.sidecar_name) = {
       name                   = var.sidecar_name
       cpu                    = var.sidecar_cpu
       command                = var.sidecar_command
       memory                 = var.sidecar_memory
-      memory_reservation     = var.sidecar_memory_reservation
+      memoryReservation     = var.sidecar_memory_reservation
       essential              = var.sidecar_essential
       user                   = var.sidecar_user #"0"
       image                  = var.fluentd_image
       environment            = []                                   #[]
       mountPoints            = []                                   #[]
-      systemControl          = []                                   #[]
-      volumeFrom             = []                                   #[]
+      systemControls          = []                                   #[]
+      volumesFrom             = []                                   #[]
       readonlyRootFilesystem = var.sidecar_readonly_root_filesystem #false
-      portMapping = [
+      portMappings = [
         {
           containerPort = var.sidecar_containerPort
           hostPort      = var.sidecar_hostPort
@@ -59,8 +65,8 @@ locals {
       firelensConfiguration = {
         type = var.sidecar_firelens_type
         options = {
-          "config-file-type"  = var.sidecar_config_file_type
-          "config-file-value" = var.sidecar_config_file_value
+          config-file-type  = var.sidecar_config_file_type
+          config-file-value = var.sidecar_config_file_value
         }
       }
 

@@ -1,6 +1,7 @@
 variable "aws_region" {
   description = "The AWS region to create resources in."
   type        = string
+  default     = "us-east-1"
 }
 ##----------------------------------------------------------------##
 ## Optional vars
@@ -183,45 +184,39 @@ variable "task_memory" {
 
 variable "container_definitions" {
   description = "The container definitions to use for the task."
-  type = map(object({
+  type = map(object(
+    {
     name               = string
     command            = optional(list(string))
     cpu                = number
-    essential          = bool
+    essential          = optional(bool, true)
     image              = string
     memory             = number
-    memory_reservation = optional(number)
-    portMapping = list(object({
-      containerPort = number
-      hostPort      = number
-    }))
-    firelensConfiguration = optional(object({
-      type = string
-      options = object({
-        config-file-type  = string
-        config-file-value = string
-      })
+    memoryReservation = optional(number)
+    portMappings = list(object({
+      containerPort = optional(number)
+      hostPort      = optional(number)
+      protocol      = optional(string, "tcp")
     }))
     logConfiguration = optional(object({
-      logDriver = string
-      options = object({
-        awslogs-create-group  = string
-        awslogs-group         = string
-        awslogs-region        = string
-        awslogs-stream-prefix = string
-      })
+      logDriver = optional(string, "awsfirelens")
+      options = optional(object({
+        awslogs-create-group  = optional(string, null)
+        awslogs-group         = optional(string, null)
+        awslogs-region        = optional(string, null)
+        awslogs-stream-prefix = optional(string, null)
+      }))
     }))
-    user = optional(string)
     mountPoints = optional(list(object({
       containerPath = string
       sourceVolume  = string
       readOnly      = bool
     })))
-    volumeFrom = optional(list(object({
+    volumesFrom = optional(list(object({
       sourceContainer = string
       readOnly        = bool
     })))
-    systemControl = optional(list(object({
+    systemControls = optional(list(object({
       namespace = string
       value     = string
     })))
@@ -234,5 +229,60 @@ variable "container_definitions" {
       name       = string
       value_from = string
     })))
-  }))
+}))
+}
+
+variable "sidecar_definitions" {
+    description = "The sidevar definitions to use for the task."
+    type        = map(object(
+      {
+        name                   = optional(string, "loki-fluentd")
+        command                = optional(list(string))
+        cpu                    = optional(number, 512)
+        memory                 = optional(number, 512)
+        memoryReservation     = optional(number, 512)
+        essential              = optional(bool, true)
+        user                   = optional(string, "0")
+        image                  = optional(string, "")
+        environment            = optional(list(object({
+          name  = string
+          value = string
+        })))
+        mountPoints            = optional(list(object({
+          containerPath = string
+          sourceVolume  = string
+          readOnly      = bool
+        })))
+        systemControls          = optional(list(object({
+          namespace = string
+          value     = string
+        })))
+        volumesFrom             = optional(list(object({
+          sourceContainer = string
+          readOnly        = bool
+        })))
+        readonlyRootFilesystem = optional(bool, true)
+        portMappings = optional(list(object({
+          containerPort = optional(number, 2020)
+          hostPort      = optional(number, 2020)
+          protocol      = optional(string, "tcp")
+        })))
+        logConfiguration = optional(object({
+          logDriver = optional(string, "awslogs")
+          options = optional(object({
+            awslogs-create-group  = optional(string, true)
+            awslogs-group         = optional(string)
+            awslogs-region        = optional(string, "us-east-1")
+            awslogs-stream-prefix = optional(string)
+          }))
+        }))
+        firelensConfiguration = optional(object({
+          type = optional(string, "fluentd")
+          options = optional(map(string), {
+            "config-file-type"  = "file"
+            "config-file-value" = "/extra.conf"
+          })
+        }))
+      }
+    ))
 }

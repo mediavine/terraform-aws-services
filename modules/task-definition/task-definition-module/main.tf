@@ -1,7 +1,11 @@
+locals {
+  merge_containers =  merge(var.container_definitions, var.sidecar_definitions)
+}
+
 resource "aws_ecs_task_definition" "this" {
   #required
-  family                = var.task_definition_name
-  container_definitions = jsonencode(values(var.container_definitions))
+  family                = var.task_definition_name  
+  container_definitions = jsonencode(values(local.merge_containers))
 
   #optional task attributes
   cpu                      = var.task_cpu
