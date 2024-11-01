@@ -1,17 +1,18 @@
 locals {
   container_definition = {
     (var.container_name) = {
-      name      = var.name
-      command   = var.command
-      cpu       = var.cpu
-      essential = var.essential
-      image     = var.image
-      memory    = var.memory
+      name              = var.name
+      command           = var.command
+      cpu               = var.cpu
+      essential         = var.essential
+      image             = var.image
+      memory            = var.memory
       memoryReservation = var.memory_reservation
       portMappings = [
         {
           containerPort = var.containerPort
           hostPort      = var.hostPort
+          protocol      = var.protocol
         }
       ]
       logConfiguration = {
@@ -23,11 +24,11 @@ locals {
           "awslogs-stream-prefix" = var.awslogs_stream_prefix
         }
       }
-      environment = []
-      secrets     = []
-      mountPoints            = []                                   #[]
-      systemControls         = []                                   #[]
-      volumesFrom             = []  
+      environment    = []
+      secrets        = []
+      mountPoints    = [] #[]
+      systemControls = [] #[]
+      volumesFrom    = []
     }
   }
 
@@ -37,14 +38,14 @@ locals {
       cpu                    = var.sidecar_cpu
       command                = var.sidecar_command
       memory                 = var.sidecar_memory
-      memoryReservation     = var.sidecar_memory_reservation
+      memoryReservation      = var.sidecar_memory_reservation
       essential              = var.sidecar_essential
       user                   = var.sidecar_user #"0"
       image                  = var.fluentd_image
       environment            = []                                   #[]
       mountPoints            = []                                   #[]
-      systemControls          = []                                   #[]
-      volumesFrom             = []                                   #[]
+      systemControls         = []                                   #[]
+      volumesFrom            = []                                   #[]
       readonlyRootFilesystem = var.sidecar_readonly_root_filesystem #false
       portMappings = [
         {
