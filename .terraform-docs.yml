@@ -6,6 +6,7 @@ recursive:
   enabled: false
   paths:
     - modules/codedeploy
+    - modules/task-definition
   include-main: true
 
 sections:
