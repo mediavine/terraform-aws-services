@@ -55,81 +55,81 @@ variable "pid_mode" {
 ## main container definition vars
 ##----------------------------------------------------------------##
 variable "container_name" {
-    description = "The name of the container"
-    type        = string
-    default     = "sandbox5"
+  description = "The name of the container"
+  type        = string
+  default     = "sandbox5"
 }
 
 variable "name" {
-    description = "The name of the container"
-    type        = string
-    default     = "sandbox5"
+  description = "The name of the container"
+  type        = string
+  default     = "sandbox5"
 }
 
 variable "command" {
-    description = "The command that is passed to the container"
-    type        = list(string)
-    default     = []
+  description = "The command that is passed to the container"
+  type        = list(string)
+  default     = []
 }
 
 variable "cpu" {
-    description = "The number of cpu units used by the task. "
-    type        = number
-    default     = 512
+  description = "The number of cpu units used by the task. "
+  type        = number
+  default     = 512
 
 }
 
 variable "image" {
-    description = "The image uri used to start the container"
-    type        = string
-    default     = "nginx:latest"
+  description = "The image uri used to start the container"
+  type        = string
+  default     = "nginx:latest"
 }
 
 variable "memory" {
-    description = "The amount of memory used by the task"
-    type        = number
-    default     = 512
+  description = "The amount of memory used by the task"
+  type        = number
+  default     = 512
 }
 
 variable "memory_reservation" {
-    description = "The amount of memory used by the task"
-    type        = number
-    default     = 512
+  description = "The amount of memory used by the task"
+  type        = number
+  default     = 512
 }
 
-variable  "containerPort" {
-    description = "The port number on the container."
-    type        = number
-    default     = 3000
+variable "containerPort" {
+  description = "The port number on the container."
+  type        = number
+  default     = 3000
 }
 
 variable "hostPort" {
-    description = "The port number on the container instance to reserve for your container."
-    type        = number
-    default     = 3000
+  description = "The port number on the container instance to reserve for your container."
+  type        = number
+  default     = 3000
 }
 
 ##----------------------------------------------------------------##
 ## sidecar container definition vars
 ##-------------------------------------------------------------
 variable "sidecar_name" {
-    description = "The name of the sidecar container"
-    type        = string
-    default     =   "sidecar4"
+  description = "The name of the sidecar container"
+  type        = string
+  default     = "sidecar4"
 }
 variable "fluentd_image" {
-    description = "The image uri used to start the sidecar container"
-    type        = string
-    default     = "fluentd/image"
+  description = "The image uri used to start the sidecar container"
+  type        = string
+  default     = "fluentd/image"
 }
 variable "sidecar_awslogs_group" {
-    description = "The log group to log to."
-    type        = string
-    default     = "sidecar4-log-group"
+  description = "The log group to log to."
+  type        = string
+  default     = "sidecar4-log-group"
 }
 
 variable "sidecar_awslogs_stream_prefix" {
-    description = "The prefix of the log stream."
-    type        = string
-    default     = "firelens-sc"
+  description = "The prefix of the log stream."
+  type        = string
+  default     = "firelens-sc"
 }
