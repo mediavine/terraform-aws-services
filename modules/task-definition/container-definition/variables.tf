@@ -299,8 +299,8 @@ variable "sidecar_definitions" {
       firelensConfiguration = optional(object({
         type = optional(string, "fluentd")
         options = optional(map(string), {
-          config-file-type  = "file"
-          config-file-value = "/extra.conf"
+          "config-file-type"  = "file"
+          "config-file-value" = "/extra.conf"
         })
       }))
     }
