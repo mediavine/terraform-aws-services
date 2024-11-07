@@ -41,7 +41,7 @@ No resources.
 | <a name="input_name"></a> [name](#input\_name) | The name of the container | `string` | `"sandbox5"` | no |
 | <a name="input_network_mode"></a> [network\_mode](#input\_network\_mode) | The network mode to use for the task. | `string` | `"awsvpc"` | no |
 | <a name="input_pid_mode"></a> [pid\_mode](#input\_pid\_mode) | The process namespace to use for the containers in the task. | `string` | `"task"` | no |
-| <a name="input_requires_compatibilities"></a> [requires\_compatibilities](#input\_requires\_compatibilities) | The launch type the task definition was registered to. | `list(string)` | <pre>[<br/>  "FARGATE"<br/>]</pre> | no |
+| <a name="input_requires_compatibilities"></a> [requires\_compatibilities](#input\_requires\_compatibilities) | The launch type the task definition was registered to. | `list(string)` | <pre>[<br>  "FARGATE"<br>]</pre> | no |
 | <a name="input_sidecar_awslogs_group"></a> [sidecar\_awslogs\_group](#input\_sidecar\_awslogs\_group) | The log group to log to. | `string` | `"sidecar4-log-group"` | no |
 | <a name="input_sidecar_awslogs_stream_prefix"></a> [sidecar\_awslogs\_stream\_prefix](#input\_sidecar\_awslogs\_stream\_prefix) | The prefix of the log stream. | `string` | `"firelens-sc"` | no |
 | <a name="input_sidecar_name"></a> [sidecar\_name](#input\_sidecar\_name) | The name of the sidecar container | `string` | `"sidecar4"` | no |
