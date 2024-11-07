@@ -6,15 +6,13 @@ title: Task Definition Module
 | container_definitions/sidecar_definitions&nbsp; | <SwmPath>[modules/task-definition/container-definition/README.MD](/modules/task-definition/container-definition/README.MD)</SwmPath>     |
 | task definition                                 | <SwmPath>[modules/task-definition/task-definition-module/README.MD](/modules/task-definition/task-definition-module/README.MD)</SwmPath> |
 
-## Container Definition
+## Container Definitions
 
 To create the main container for the task definition, create an object called <SwmToken path="/modules/task-definition/container-definition/variables.tf" pos="205:3:3" line-data="variable &quot;container_definitions&quot; {">`container_definitions`</SwmToken>. Name, cpu, image, and memory are required parameters. All other values use a default but can be specified if needed.
 
 Note: logConfiguration is using default values that should not be changed when deploying a fluentd container. Adjusting the default value could result in crashing the container.
 
-To use <SwmToken path="/modules/task-definition/container-definition/variables.tf" pos="221:1:1" line-data="      logConfiguration = optional(object({">`logConfiguration`</SwmToken> default values, add an empty object as shown below or it won't show up in the Terraform plan.
-
-<SwmSnippet path="examples/task-definition/main.tf" line="13">
+<SwmSnippet path="/examples/task-definition/main.tf" line="13">
 
 ---
 
@@ -35,9 +33,17 @@ To use <SwmToken path="/modules/task-definition/container-definition/variables.t
           hostPort      = var.hostPort
         }
       ]
-      logConfiguration = {}
     }
   }
+  sidecar_definitions = {
+    (var.sidecar_name) = {
+      image        = var.fluentd_image
+      logConfiguration = {
+        options = {
+          "awslogs-group"         = var.sidecar_awslogs_group
+          "awslogs-stream-prefix" = var.sidecar_awslogs_stream_prefix
+        }
+      }
 ```
 
 ---
@@ -52,11 +58,7 @@ Name, memory, cpu, memory reservation, essential, user,  port mappings,  are usi
 
 Note: Read only file system, and fire lens configuration are using default values that should not be adjusted when deploying a fluentd container. Adjusting the default value can the container to crash. For logConfiguration, adjusting <SwmToken path="/examples/task-definition/variables.tf" pos="125:3:3" line-data="variable &quot;sidecar_awslogs_group&quot; {">`sidecar_awslogs_group`</SwmToken> and <SwmToken path="/modules/task-definition/container-definition/variables.tf" pos="182:3:3" line-data="variable &quot;sidecar_awslogs_stream_prefix&quot; {">`sidecar_awslogs_stream_prefix`</SwmToken> is totally fine.
 
-To use the default values for portMappings, add an empty \[{}\] as shown below or it won't show up in the Terraform plan.
-
-To use the default values for firelensConfiguration, add an empty {} as shown below or it won't show up in the Terraform plan.
-
-<SwmSnippet path="/examples/task-definition/main.tf" line="30">
+<SwmSnippet path="/examples/task-definition/main.tf" line="29">
 
 ---
 
@@ -66,14 +68,12 @@ To use the default values for firelensConfiguration, add an empty {} as shown be
   sidecar_definitions = {
     (var.sidecar_name) = {
       image        = var.fluentd_image
-      portMappings = [{}]
       logConfiguration = {
         options = {
           "awslogs-group"         = var.sidecar_awslogs_group
           "awslogs-stream-prefix" = var.sidecar_awslogs_stream_prefix
         }
       }
-      firelensConfiguration = {}
     }
   }
 }
@@ -85,7 +85,7 @@ To use the default values for firelensConfiguration, add an empty {} as shown be
 
 ## Task Definition
 
-To create a task definition, you cn choose from a list of additional parameters. Only task_definition_name and container_definitions (include sidecar_definitions) are required.&nbsp;&nbsp;
+To create a task definition, you can choose from a list of additional parameters. Only task_definition_name and container_definitions (which contains sidecar_definitions) are required.&nbsp;&nbsp;
 
 <SwmSnippet path="examples/task-definition/main.tf" line="1">
 

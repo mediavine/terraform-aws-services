@@ -1,4 +1,4 @@
-module "task_definition_example3" {
+module "task_definition_example4" {
   source                   = "../../modules/task-definition/task-definition-module"
   aws_region               = var.aws_region
   task_definition_name     = var.task_definition_name
@@ -24,20 +24,17 @@ module "task_definition_example3" {
           hostPort      = var.hostPort
         }
       ]
-      logConfiguration = {}
     }
   }
   sidecar_definitions = {
     (var.sidecar_name) = {
       image        = var.fluentd_image
-      portMappings = [{}]
       logConfiguration = {
         options = {
           "awslogs-group"         = var.sidecar_awslogs_group
           "awslogs-stream-prefix" = var.sidecar_awslogs_stream_prefix
         }
       }
-      firelensConfiguration = {}
     }
   }
 }

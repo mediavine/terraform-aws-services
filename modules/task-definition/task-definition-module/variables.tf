@@ -206,7 +206,7 @@ variable "container_definitions" {
           awslogs-region        = optional(string, null)
           awslogs-stream-prefix = optional(string, null)
         }))
-      }))
+      }), {})
       mountPoints = optional(list(object({
         containerPath = string
         sourceVolume  = string
@@ -266,7 +266,7 @@ variable "sidecar_definitions" {
         containerPort = optional(number, 2020)
         hostPort      = optional(number, 2020)
         protocol      = optional(string, "tcp")
-      })))
+      })), [{}])
       logConfiguration = optional(object({
         logDriver = optional(string, "awslogs")
         options = optional(object({
@@ -282,7 +282,7 @@ variable "sidecar_definitions" {
           "config-file-type"  = "file"
           "config-file-value" = "/extra.conf"
         })
-      }))
+      }), {})
     }
   ))
 }
