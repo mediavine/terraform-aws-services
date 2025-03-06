@@ -28,7 +28,7 @@ module "task_definition_example4" {
   }
   sidecar_definitions = {
     (var.sidecar_name) = {
-      image        = var.fluentd_image
+      image = var.fluentd_image
       logConfiguration = {
         options = {
           "awslogs-group"         = var.sidecar_awslogs_group
