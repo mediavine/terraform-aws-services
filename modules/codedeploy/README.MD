@@ -94,6 +94,7 @@ No modules.
 | <a name="output_codedeploy_application_id"></a> [codedeploy\_application\_id](#output\_codedeploy\_application\_id) | ID of the CodeDeploy application |
 | <a name="output_codedeploy_id"></a> [codedeploy\_id](#output\_codedeploy\_id) | Amazon's assigned ID for the application |
 | <a name="output_green_lb_target_group_name"></a> [green\_lb\_target\_group\_name](#output\_green\_lb\_target\_group\_name) | n/a |
+| <a name="output_lb_http_test_tg_arn"></a> [lb\_http\_test\_tg\_arn](#output\_lb\_http\_test\_tg\_arn) | n/a |
 | <a name="output_lb_http_test_tg_name"></a> [lb\_http\_test\_tg\_name](#output\_lb\_http\_test\_tg\_name) | n/a |
 | <a name="output_test_listener_arn"></a> [test\_listener\_arn](#output\_test\_listener\_arn) | ARN of the test listener |
 | <a name="output_test_target_group_name"></a> [test\_target\_group\_name](#output\_test\_target\_group\_name) | ARN of the test target group |
