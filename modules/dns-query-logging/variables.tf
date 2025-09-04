@@ -12,3 +12,9 @@ variable "retention_in_days" {
   description = "The number of days to retain the logs"
   type        = number
 }
+
+variable "create_iam_policy" {
+  description = "If the IAM policy for logging queries should be created"
+  type        = bool
+  default     = false
+}
